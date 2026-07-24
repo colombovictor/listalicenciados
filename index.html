@@ -3,209 +3,393 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="css/style.css">
-<link rel="shortcut icon" href="img/image-removebg-preview (12).png" type="image/x-icon">
 <title>Licenciados - Compre Sem Fila</title>
+<meta name="description" content="Encontre o licenciado Compre Sem Fila mais próximo de você e fale direto pelo WhatsApp.">
+<link rel="shortcut icon" href="img/image-removebg-preview (12).png" type="image/x-icon">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --vermelho: #c40000;
+    --amarelo: #ffcc00;
+    --whatsapp: #25D366;
+    --whatsapp-hover: #1ebe5d;
+    --texto: #1F2A28;
+    --texto-suave: #555;
+    --borda: #eee;
+    --branco: #FFFFFF;
+    --raio: 12px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body{
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: linear-gradient(120deg, #f5f5f5, #fff);
+    color: var(--texto);
+  }
+
+  ::selection{ background: var(--amarelo); color: #000; }
+
+  a:focus-visible, input:focus-visible, button:focus-visible{
+    outline: 3px solid var(--vermelho);
+    outline-offset: 2px;
+  }
+
+  .topo{
+    background: linear-gradient(90deg, #c40000, #ffcc00);
+    color: var(--branco);
+    padding: 32px 20px 60px;
+    text-align: center;
+  }
+
+  .topo h1{
+    margin: 0 0 6px;
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: .2px;
+  }
+
+  .topo p{
+    margin: 0;
+    opacity: .95;
+    font-size: .95rem;
+  }
+
+  .topo .stat{
+    display: inline-block;
+    margin-top: 14px;
+    background: rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.35);
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: .85rem;
+    font-weight: 600;
+  }
+
+  .container{
+    max-width: 1000px;
+    margin: -36px auto 40px;
+    padding: 0 16px;
+  }
+
+  .busca-box{
+    background: var(--branco);
+    border-radius: var(--raio);
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 12px 20px, rgba(0, 0, 0, 0.08) 0px 4px 6px;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+
+  .campo-wrap{
+    position: relative;
+  }
+
+  .busca-box input{
+    width: 100%;
+    padding: 12px 40px 12px 16px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color .15s;
+  }
+
+  .busca-box input:focus{
+    border-color: var(--vermelho);
+  }
+
+  .limpar{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 6px;
+    display: none;
+  }
+
+  .limpar:hover{ color: var(--vermelho); }
+
+  .contador{
+    font-size: .85rem;
+    color: var(--texto-suave);
+    margin-top: 8px;
+    padding-left: 4px;
+  }
+
+  .grade{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .card{
+    background: var(--branco);
+    border-radius: var(--raio);
+    border: 1px solid var(--borda);
+    padding: 18px 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 20px, rgba(0, 0, 0, 0.06) 0px 3px 6px;
+    transition: transform .2s, background .2s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: entrar .35s ease backwards;
+  }
+
+  @keyframes entrar{
+    from{ opacity: 0; transform: translateY(8px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .card{ animation: none; }
+  }
+
+  .card:hover{
+    background: #fff8e1;
+    transform: scale(1.01);
+  }
+
+  .card-cabeca{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .avatar{
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--vermelho), #e04b1a);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: .95rem;
+  }
+
+  .card-cabeca-info{
+    min-width: 0;
+  }
+
+  .card .nome{
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--vermelho);
+  }
+
+  .card .telefone{
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--texto-suave);
+  }
+
+  .tags{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tag{
+    background: var(--amarelo);
+    color: #000;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 20px;
+  }
+
+  .tag mark, .nome mark{
+    background: var(--vermelho);
+    color: #fff;
+    border-radius: 3px;
+    padding: 0 2px;
+  }
+
+  .whatsapp{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 4px;
+    background: var(--whatsapp);
+    color: var(--branco);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: .9rem;
+    padding: 10px 14px;
+    border-radius: 8px;
+    transition: 0.3s;
+  }
+
+  .whatsapp:hover{ background: var(--whatsapp-hover); }
+
+  .whatsapp svg{ width: 16px; height: 16px; fill: currentColor; }
+
+  .sem-resultado{
+    text-align: center;
+    color: var(--texto-suave);
+    padding: 40px 0;
+    display: none;
+  }
+
+  footer{
+    text-align: center;
+    color: var(--vermelho);
+    font-size: .8rem;
+    padding: 24px 0 40px;
+    margin: 10px;
+  }
+
+  @media (max-width: 480px){
+    .grade{ grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 
 <body>
 
+<div class="topo">
+  <h1>Licenciados Compre Sem Fila</h1>
+  <p>Encontre o licenciado  da cidade e fale direto pelo WhatsApp</p>
+  <div class="stat" id="stat-topo"></div>
+</div>
+
 <div class="container">
-<h2><strong>Licenciados - Compre Sem Fila</strong></h2>
 
-<table>
-<thead>
-<tr>
-<th><strong>Nome</strong></th>
-<th><strong>Telefone</strong></th>
-<th><strong>Cidades</strong></th>
-</tr>
-</thead>
+  <div class="busca-box">
+    <div class="campo-wrap">
+      <input type="text" id="busca" placeholder="Buscar por cidade ou nome do licenciado..." autocomplete="off">
+      <button class="limpar" id="limpar" type="button" aria-label="Limpar busca">&times;</button>
+    </div>
+    <div class="contador" id="contador" aria-live="polite"></div>
+  </div>
 
-<tbody>
-
-<tr>
-<td class="nome"><strong>Bete</strong></td>
-<td>
-<div class="telefone-box">
-<span class="telefone">(79) 99914-5353</span>
-<a class="whatsapp" href="https://wa.me/5579999145353" target="_blank">WhatsApp</a>
-</div>
-</td>
-<td><div class="tags">
-<span class="tag">Itabaianinha</span>
-<span class="tag">Boquim</span>
-<span class="tag">Riachão</span>
-<span class="tag">Estância</span>
-<span class="tag">Paripiranga</span>
-</div></td>
-</tr>
-
-<tr>
-<td class="nome"><strong>Lili</strong></td>
-<td>
-<div class="telefone-box">
-<span class="telefone">(79) 9 9898-9960</span>
-<a class="whatsapp" href="https://wa.me/5579998989960" target="_blank">WhatsApp</a>
-</div>
-</td>
-<td><div class="tags">
-<span class="tag">Barra dos Coqueiros</span>
-<span class="tag">São Cristóvão</span>
-<span class="tag">Itaporanga d'ajuda</span>
-</div></td>
-</tr>
-
-<tr>
-<td class="nome"><strong>Wendel</strong></td>
-<td>
-<div class="telefone-box">
-<span class="telefone">(79) 9 8859-0639</span>
-<a class="whatsapp" href="https://wa.me/5579988590639" target="_blank">WhatsApp</a>
-</div>
-</td>
-<td><div class="tags">
-<span class="tag">Nossa Senhora da Glória</span>
-<span class="tag">Canindé de São Francisco</span>
-</div></td>
-</tr>
-
-<tr>
-<td class="nome"><strong>Eduardo</strong></td>
-<td>
-<div class="telefone-box">
-<span class="telefone">(79) 9 9802-1245</span>
-<a class="whatsapp" href="https://wa.me/5579998021245" target="_blank">WhatsApp</a>
-</div>
-</td>
-<td><div class="tags">
-<span class="tag">Aquidabã</span>
-<span class="tag">Propriá</span>
-</div></td>
-</tr>
-
-<tr>
-<td class="nome"><strong>Wesley</strong></td>
-<td>
-<div class="telefone-box">
-<span class="telefone">(83) 9 9334-3458</span>
-<a class="whatsapp" href="https://wa.me/5583993343458/Loja com pedido pendente()/" target="_blank">WhatsApp</a>
-</div>
-</td>
-<td><div class="tags">
-<span class="tag">Pocinhos</span>
-<span class="tag">Puxinaná</span>
-</div></td>
-</tr>
-
-<tr>
-<td class="nome"><strong>Welligton</strong></td>
-<td>
-<div class="telefone-box">
-<span class="telefone">(75) 9 9962-2016</span>
-<a class="whatsapp" href="https://wa.me/5575999622016" target="_blank">WhatsApp</a>
-</div>
-</td>
-<td><div class="tags">
-<span class="tag">Paulo Afonso</span>
-</div></td>
-</tr>
-
-<tr>
-<td class="nome"><strong>Henrique</strong></td>
-<td>
-<div class="telefone-box">
-<span class="telefone">(83) 9 9376-0073</span>
-<a class="whatsapp" href="https://wa.me/5583993760073" target="_blank">WhatsApp</a>
-</div>
-</td>
-<td><div class="tags">
-<span class="tag">Patu</span>
-</div></td>
-</tr>
-
-<tr>
-<td class="nome"><strong>Ildo</strong></td>
-<td>
-<div class="telefone-box">
-<span class="telefone">(79) 9 9932-0581</span>
-<a class="whatsapp" href="https://wa.me/5579999320581" target="_blank">WhatsApp</a>
-</div>
-</td>
-<td><div class="tags">
-<span class="tag">Poço Verde</span>
-</div></td>
-</tr>
-
-<tr>
-<td class="nome"><strong>Reis</strong></td>
-<td>
-<div class="telefone-box">
-<span class="telefone">(79) 9 9965-4188</span>
-<a class="whatsapp" href="https://wa.me/5579999654188" target="_blank">WhatsApp</a>
-</div>
-</td>
-<td><div class="tags">
-<span class="tag">Carmópolis</span>
-</div></td>
-</tr>
-
-<tr>
-<td class="nome"><strong>Júnior</strong></td>
-<td>
-<div class="telefone-box">
-<span class="telefone">(82) 9 8858-1161</span>
-<a class="whatsapp" href="https://wa.me/5582988581161" target="_blank">WhatsApp</a>
-</div>
-</td>
-<td><div class="tags">
-<span class="tag">São Sebastião</span>
-</div></td>
-</tr>
-
-<tr>
-<td class="nome"><strong>Cássio Theodoro</strong></td>
-<td>
-<div class="telefone-box">
-<span class="telefone"> (94) 9 8430-9921</span>
-<a class="whatsapp" href="https://wa.me/5594984309921" target="_blank">WhatsApp</a>
-</div>
-</td>
-<td><div class="tags">
-<span class="tag">Canaã dos Carajás</span>
-</div></td>
-</tr>
-
-<tr>
-<td class="nome"><strong>Bruna</strong></td>
-<td>
-<div class="telefone-box">
-<span class="telefone">(81) 9 9531-5747</span>
-<a class="whatsapp" href="https://wa.me/5581995315747" target="_blank">WhatsApp</a>
-</div>
-</td>
-<td><div class="tags">
-<span class="tag">Surubim</span>
-</div></td>
-</tr>
-<tr>
-<td class="nome"><strong>Robson</strong></td>
-<td>
-<div class="telefone-box">
-<span class="telefone">(33) 9 9122-3902</span>
-<a class="whatsapp" href="https://wa.me/5533991223902" target="_blank">WhatsApp</a>
-</div>
-</td>
-<td><div class="tags">
-<span class="tag">Ipatinga</span>
-<span class="tag">Governador Valadares</span>
-</div></td>
-</tr>
-
-</tbody>
-</table>
+  <div class="grade" id="grade"></div>
+  <p class="sem-resultado" id="sem-resultado">Nenhum licenciado encontrado para essa busca.</p>
 
 </div>
+
 <footer><strong>Copyright © Compre Sem Fila 2026</strong></footer>
+
+<script>
+// Ícone do WhatsApp em SVG (evita depender de imagem externa)
+const iconeWhats = `<svg viewBox="0 0 32 32"><path d="M16 .3C7.4.3.4 7.3.4 15.9c0 2.8.7 5.5 2.1 7.9L.3 31.7l8.1-2.1c2.3 1.3 4.9 1.9 7.6 1.9 8.6 0 15.6-7 15.6-15.6C31.6 7.3 24.6.3 16 .3zm0 28.5c-2.4 0-4.7-.6-6.7-1.8l-.5-.3-4.8 1.3 1.3-4.7-.3-.5c-1.3-2.1-2-4.5-2-7 0-7.2 5.9-13.1 13.1-13.1S29.1 8.7 29.1 15.9 23.2 28.8 16 28.8zm7.2-9.8c-.4-.2-2.3-1.1-2.7-1.3-.4-.1-.6-.2-.9.2-.3.4-1 1.3-1.2 1.5-.2.3-.4.3-.8.1-.4-.2-1.7-.6-3.1-1.9-1.2-1-1.9-2.3-2.2-2.7-.2-.4 0-.6.2-.8.2-.2.4-.4.6-.6.2-.2.3-.4.4-.6.1-.3.1-.5 0-.7-.1-.2-.9-2.1-1.2-2.9-.3-.7-.6-.6-.9-.6h-.7c-.3 0-.7.1-1 .4-.4.4-1.4 1.3-1.4 3.2s1.4 3.7 1.6 4c.2.3 2.8 4.2 6.7 5.9 3.9 1.6 3.9 1.1 4.6 1 .7-.1 2.3-.9 2.6-1.8.3-.9.3-1.7.2-1.8-.1-.2-.4-.3-.8-.5z"/></svg>`;
+
+const licenciados = [
+  { nome: "Bete", telefone: "(79) 9 9914-5353", whats: "5579999145353",
+    cidades: ["Itabaianinha", "Boquim", "Riachão", "Estância", "Paripiranga"] },
+  { nome: "Lili", telefone: "(79) 9 9898-9960", whats: "5579998989960",
+    cidades: ["Barra dos Coqueiros", "São Cristóvão", "Itaporanga d'Ajuda"] },
+  { nome: "Wendel", telefone: "(79) 9 8859-0639", whats: "5579988590639",
+    cidades: ["Nossa Senhora da Glória", "Canindé de São Francisco"] },
+  { nome: "Eduardo", telefone: "(79) 9 9802-1245", whats: "5579998021245",
+    cidades: ["Aquidabã", "Propriá"] },
+  { nome: "Wesley", telefone: "(83) 9 9334-3458", whats: "5583993343458",
+    cidades: ["Pocinhos", "Puxinanã"] },
+  { nome: "Welligton", telefone: "(75) 9 9962-2016", whats: "5575999622016",
+    cidades: ["Paulo Afonso"] },
+  { nome: "Henrique", telefone: "(83) 9 9376-0073", whats: "5583993760073",
+    cidades: ["Patu"] },
+  { nome: "Ildo", telefone: "(79) 9 9932-0581", whats: "5579999320581",
+    cidades: ["Poço Verde"] },
+  { nome: "Reis", telefone: "(79) 9 9965-4188", whats: "5579999654188",
+    cidades: ["Carmópolis"] },
+  { nome: "Júnior", telefone: "(82) 9 8858-1161", whats: "5582988581161",
+    cidades: ["São Sebastião"] },
+  { nome: "Cássio Theodoro", telefone: "(94) 9 8430-9921", whats: "5594984309921",
+    cidades: ["Canaã dos Carajás"] },
+  { nome: "Bruna", telefone: "(81) 9 9531-5747", whats: "5581995315747",
+    cidades: ["Surubim"] },
+  { nome: "Robson", telefone: "(33) 9 9122-3902", whats: "5533991223902",
+    cidades: ["Ipatinga", "Governador Valadares"] },
+].sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+
+const grade = document.getElementById("grade");
+const contador = document.getElementById("contador");
+const semResultado = document.getElementById("sem-resultado");
+const campoBusca = document.getElementById("busca");
+const botaoLimpar = document.getElementById("limpar");
+const statTopo = document.getElementById("stat-topo");
+
+const totalCidades = new Set(licenciados.flatMap(l => l.cidades)).size;
+statTopo.textContent = `${licenciados.length} licenciados · ${totalCidades} cidades atendidas`;
+
+function iniciais(nome){
+  const partes = nome.trim().split(/\s+/);
+  const letras = partes.length > 1 ? partes[0][0] + partes[partes.length - 1][0] : partes[0].slice(0, 2);
+  return letras.toUpperCase();
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+}
+
+function destacar(texto, termo){
+  const seguro = escapeHtml(texto);
+  if(!termo) return seguro;
+  const regex = new RegExp(`(${termo.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "ig");
+  return seguro.replace(regex, "<mark>$1</mark>");
+}
+
+function renderizar(lista, termo = ""){
+  grade.innerHTML = "";
+  semResultado.style.display = lista.length ? "none" : "block";
+  contador.textContent = `${lista.length} licenciado${lista.length !== 1 ? "s" : ""} encontrado${lista.length !== 1 ? "s" : ""}`;
+
+  lista.forEach((l, i) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.animationDelay = `${Math.min(i, 12) * 0.03}s`;
+    card.innerHTML = `
+      <div class="card-cabeca">
+        <div class="avatar">${iniciais(l.nome)}</div>
+        <div class="card-cabeca-info">
+          <div class="nome">${destacar(l.nome, termo)}</div>
+          <div class="telefone">${l.telefone}</div>
+        </div>
+      </div>
+      <div class="tags">${l.cidades.map(c => `<span class="tag">${destacar(c, termo)}</span>`).join("")}</div>
+      <a class="whatsapp" href="https://wa.me/${l.whats}" target="_blank" rel="noopener">
+        ${iconeWhats} Chamar no WhatsApp
+      </a>
+    `;
+    grade.appendChild(card);
+  });
+}
+
+function filtrar(){
+  const termo = campoBusca.value.trim().toLowerCase();
+  botaoLimpar.style.display = termo ? "block" : "none";
+
+  if(!termo){ renderizar(licenciados); return; }
+
+  const filtrados = licenciados.filter(l =>
+    l.nome.toLowerCase().includes(termo) ||
+    l.cidades.some(c => c.toLowerCase().includes(termo))
+  );
+  renderizar(filtrados, termo);
+}
+
+campoBusca.addEventListener("input", filtrar);
+botaoLimpar.addEventListener("click", () => {
+  campoBusca.value = "";
+  filtrar();
+  campoBusca.focus();
+});
+
+renderizar(licenciados);
+</script>
+
 </body>
 </html>
